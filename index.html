@@ -143,15 +143,16 @@
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     // --- PASTE YOUR FIREBASE CONFIG HERE ---
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyDbdnwzFoOXcvz0SEhDLPKLC6nzgcNoEvA",
+  authDomain: "questions-9d203.firebaseapp.com",
+  databaseURL: "https://questions-9d203-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "questions-9d203",
+  storageBucket: "questions-9d203.firebasestorage.app",
+  messagingSenderId: "367649057882",
+  appId: "1:367649057882:web:beb5d05916764254227c63",
+  measurementId: "G-VC1R07DTLY"
+};
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
