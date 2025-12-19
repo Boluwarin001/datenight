@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enoch & Esther | 21 Questions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital@0;1&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d63384;
+            --secondary: #f8bbd0;
+            --dark: #2d3436;
+            --bg: #fff5f7;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: #777;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .question-view {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .category-tag {
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        #question-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin: 2rem 0;
+            line-height: 1.4;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #999;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heart {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="home-screen">
+        <h1>Enoch <span class="heart">♥</span> Esther</h1>
+        <p class="subtitle">A night of questions and connections</p>
+        
+        <div class="menu-grid">
+            <button class="btn" onclick="pickQuestion('romantic')">Romantic</button>
+            <button class="btn" onclick="pickQuestion('deep')">Deep Questions</button>
+            <button class="btn" onclick="pickQuestion('future')">Future & Dreams</button>
+            <button class="btn" onclick="pickQuestion('flirty')">Fun & Flirty</button>
+        </div>
+    </div>
+
+    <div id="question-screen" class="question-view">
+        <div class="category-tag" id="current-category">Category</div>
+        <div id="question-text">Waiting for partner to pick...</div>
+        <button class="btn" id="next-btn" style="width: 100%;">Pick Another Random</button>
+        <br>
+        <button class="back-btn" onclick="goBack()">← Back to Menu</button>
+    </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // --- PASTE YOUR FIREBASE CONFIG HERE ---
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const stateRef = ref(db, 'game/state');
+
+    const questions = {
+        romantic: [
+            "What was your first impression of me?", "What kind of date would be perfect in your eyes?", "What’s something small I do that you really like?", "How do you know when you’re falling for someone?", "What’s your love language?", "What’s your favorite memory of us so far?", "What’s one thing you’ve always wanted to tell me but haven’t?", "What do you like most about being with me?", "What’s one thing you hope never changes between us?", "What’s your favorite way to show affection?", "What’s one thing you never get tired of hearing from me?", "What’s a small moment with me that meant more than I realized?", "If I had a rough day, what’s the first thing you’d do to help?", "What makes you feel most connected to me?", "What’s a way you’ve seen us grow as a couple?", "What do you love most about how we communicate?", "What’s one thing I’ve taught you without even realizing it?", "When do you feel the safest or most at peace with me?", "What part of our relationship are you most proud of?", "What’s your favorite way to spend quiet time together?"
+        ],
+        deep: [
+            "What does a healthy relationship look like to you?", "What’s something from your childhood that still impacts you today?", "What’s your biggest fear in a relationship?", "How do you usually handle conflict?", "What’s one thing you’ve learned from past relationships?", "What’s something you’ve struggled with that most people don’t know?", "Do you believe people can really change?", "What’s something you’ve always wanted to ask me but haven’t yet?", "What does commitment mean to you?", "Do you think it’s better to follow your head or your heart?", "When was the last time you were truly proud of yourself?", "What’s one value you’ll never compromise on?", "What’s a hard truth you’ve learned about love?", "How do you want to be supported during tough times?", "What does vulnerability mean to you in a relationship?", "What’s something you want to get better at for us?", "What’s one way I’ve made you feel seen or understood?", "How do you handle moments when you feel jealous or insecure?", "What are your boundaries in a relationship, and why?", "What’s a part of your personality you’re still figuring out?"
+        ],
+        future: [
+            "Where do you see yourself in five years?", "What kind of life do you want to build one day?", "Do you want to travel a lot or settle down in one place?", "What kind of parent do you think you’d be?", "What are your biggest goals in life?", "What’s something you’ve always wanted to try — but haven’t yet?", "If we won a free trip anywhere, where would we go?", "What’s one place you want us to visit together before we’re older?", "What’s a dream you haven’t shared with many people?", "How do you picture your life in 10 years?"
+        ],
+        flirty: [
+            "What’s your biggest turn-on?", "If we could take a trip anywhere together right now, where would we go?", "What song makes you think of me?", "If we were characters in a romantic movie, what would our story be called?", "Do you believe in soulmates?", "What’s your go-to move when trying to impress me?", "What’s something cute you’ve imagined us doing together?", "What cheesy romantic gesture would you secretly love?", "What’s your favorite way to flirt?", "What’s one compliment you love getting from me?"
+        ]
+    };
+
+    // Global pick function
+    window.pickQuestion = (category) => {
+        const list = questions[category];
+        const randomQ = list[Math.floor(Math.random() * list.length)];
+        
+        // Push to Firebase
+        set(stateRef, {
+            view: 'question',
+            category: category,
+            question: randomQ,
+            timestamp: Date.now()
+        });
+    };
+
+    window.goBack = () => {
+        set(stateRef, {
+            view: 'home',
+            timestamp: Date.now()
+        });
+    };
+
+    // Listen for changes from Firebase
+    onValue(stateRef, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        if (data.view === 'question') {
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('question-screen').style.display = 'block';
+            document.getElementById('current-category').innerText = data.category;
+            document.getElementById('question-text').innerText = data.question;
+            
+            // Update the "Next" button to work for the current category
+            document.getElementById('next-btn').onclick = () => pickQuestion(data.category);
+        } else {
+            document.getElementById('home-screen').style.display = 'block';
+            document.getElementById('question-screen').style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
